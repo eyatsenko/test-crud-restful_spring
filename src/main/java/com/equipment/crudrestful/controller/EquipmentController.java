@@ -52,7 +52,7 @@ public class EquipmentController {
         return ResponseEntity.ok().body(equipment);
     }
 
-    // delete employee by id
+    // delete equipment by id
     @DeleteMapping("/equipment/{equipmentNumber}")
     public ResponseEntity<?> deleteEquipment(@PathVariable(value = "equipmentNumber") long equipmentNumber) throws ResourceNotFoundException {
         equipmentRepository.findById(equipmentNumber)
