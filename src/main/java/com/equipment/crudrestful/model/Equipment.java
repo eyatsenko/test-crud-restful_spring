@@ -1,6 +1,7 @@
 package com.equipment.crudrestful.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "equipments")
@@ -20,7 +21,7 @@ public class Equipment {
     private String deviceId;
 
 
-    public Equipment() {
+    public Equipment(Long o, String part, String status, String deviceId) {
     }
 
     public Equipment(long equipmentNumber, String equipmentType, String status, String deviceId) {
@@ -28,6 +29,10 @@ public class Equipment {
         this.equipmentType = equipmentType;
         this.status = status;
         this.deviceId = deviceId;
+    }
+
+    public Equipment() {
+
     }
 
     public long getEquipmentNumber() {
@@ -56,5 +61,18 @@ public class Equipment {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Equipment equipment = (Equipment) o;
+        return equipmentType.equals(equipment.equipmentType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(equipmentType);
     }
 }
