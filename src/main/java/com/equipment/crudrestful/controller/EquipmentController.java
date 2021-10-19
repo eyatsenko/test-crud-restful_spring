@@ -5,13 +5,12 @@ import com.equipment.crudrestful.model.Equipment;
 import com.equipment.crudrestful.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -23,8 +22,19 @@ public class EquipmentController {
 
     // get all Equipment
     @GetMapping("/equipment")
-    public List<Equipment> getAllEquipment() {
-        return equipmentRepository.findAll();
+    public List<Equipment> getAllEquipment(@RequestParam(value = "equipmentType", required = false) String equipmentType) {
+
+        List<Equipment> allEquipment = equipmentRepository.findAll();
+
+        if (equipmentType == null || equipmentType.isEmpty() || equipmentType.isBlank()) {
+            return allEquipment;
+        } else {
+            Stream <Equipment> equipmentStream = allEquipment.stream();
+
+            return equipmentStream
+                    .filter(e -> e.getEquipmentType().equals(equipmentType))
+                    .collect(Collectors.toList());
+        }
     }
 
     // create Equipment
@@ -40,33 +50,6 @@ public class EquipmentController {
         Equipment equipment = equipmentRepository.findById(equipmentNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment not found for this id :: " + equipmentNumber));
         return ResponseEntity.ok().body(equipment);
-    }
-
-    // get Equipment by equipmentType
-//    @GetMapping("/equipment")
-    @GetMapping
-    public List<Equipment> getEquipmentByEquipmentType(@RequestParam MultiValueMap<String, String> filters) {
-
-        String[] parts = filters.toString().split(":");
-        String part1 = parts[1].replace("]}", "");
-
-        Equipment filterEquipment = new Equipment(1L, part1, "test", "test");
-        List<Equipment> result = new ArrayList<>();
-
-        List<Equipment> allEquipment = equipmentRepository.findAll();
-//        Stream equipment = allEquipment.stream();
-//        equipment.forEach(e -> {
-//            if (e.equals(filterEquipment)) {
-//                result.add(e);
-//            }
-//        });
-
-        for (Equipment e : allEquipment) {
-            if (e.equals(filterEquipment)) {
-                result.add(e);
-            }
-        }
-        return result;
     }
 
     // update Equipment
