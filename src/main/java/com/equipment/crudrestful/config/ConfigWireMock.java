@@ -6,10 +6,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class ConfigWireMock {
 
-    private static final String GET_EQUIPMENT_BY_NUMBER_URL = "/equipment/equipment/1";
-    private static final String CREATE_EQUIPMENT_URL = "/equipment/equipment";
-    private static final String EDIT_EQUIPMENT_TYPE_URL = "/equipment/equipment/1";
-    private static final String DELETE_EQUIPMENT_URL = "/equipment/equipment/1";
+    public static final String GET_EQUIPMENT_BY_NUMBER_URL = "/equipment/equipment/";
+    public static final String CREATE_EQUIPMENT_URL = "/equipment/equipment";
+    public static final String EDIT_EQUIPMENT_TYPE_URL = "/equipment/equipment/1";
+    public static final String DELETE_EQUIPMENT_URL = "/equipment/equipment/1";
 
     public static Result stubForGet () {
         stubFor(post(GET_EQUIPMENT_BY_NUMBER_URL)
