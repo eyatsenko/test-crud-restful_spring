@@ -86,19 +86,23 @@ public class ConfigWireMock {
     }
 
     public static void stubForEdit() {
+
         stubFor(put(EDIT_EQUIPMENT_TYPE_URL + 1)
                 .withHeader("Content-Type", containing("application/json"))
                 .withRequestBody(equalTo(jsonBodyChanged))
                 .willReturn(ok()
                         .withHeader("Content-Type", "application/json")
                         .withBody(jsonBodyChanged)));
+
     }
 
     public static void stubForDelete() {
+
         stubFor(delete(DELETE_EQUIPMENT_URL + 1)
                 .withHeader("Content-Type", containing("application/json"))
                 .willReturn(ok()
                         .withHeader("Content-Type", "application/json")
                         .withBody(jsonBodyChanged)));
+
     }
 }

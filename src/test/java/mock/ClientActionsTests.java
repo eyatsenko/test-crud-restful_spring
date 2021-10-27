@@ -18,7 +18,6 @@ public class ClientActionsTests {
     WireMockServer wireMockServer;
     String equipmentNumber = "1";
 
-
     @BeforeTest
     public void setUp() {
         wireMockServer = new WireMockServer(wireMockConfig().port(portForUrl));
@@ -40,6 +39,26 @@ public class ClientActionsTests {
         assertTrue(responseBodyPost.contains("equipmentNumber"));
         assertEquals(responsePost.code(), 201);
 
+        Response responseDelete = ClientActions.deleteEquipment(equipmentNumber);
+        assertEquals(responseDelete.code(), 200);
+        wireMockServer.resetScenarios();
+
+    }
+
+    @Test
+    public void testUpdateEquipment() throws IOException {
+
+        Response responseGet = ClientActions.getEquipmentByNumber(equipmentNumber);
+        String responseBodyGet = responseGet.body().string();
+        assertTrue(responseBodyGet.contains("Not Found"), "Response body should contain 'Not Found', but contains '" +
+                responseBodyGet + "'");
+        assertEquals(responseGet.code(), 404);
+
+        Response responsePost = ClientActions.createEquipment();
+        String responseBodyPost = responsePost.body().string();
+        assertTrue(responseBodyPost.contains("equipmentNumber"));
+        assertEquals(responsePost.code(), 201);
+
         Response responseUpdate = ClientActions.updateEquipment(equipmentNumber);
         String responseBodyUpdate = responseUpdate.body().string();
         assertTrue(responseBodyUpdate.contains("enabled"), "Response body should contain 'enabled', but contains '" +
@@ -48,34 +67,36 @@ public class ClientActionsTests {
 
         Response responseDelete = ClientActions.deleteEquipment(equipmentNumber);
         assertEquals(responseDelete.code(), 200);
+        wireMockServer.resetScenarios();
+
     }
 
-/*    @Test
-    public void testUpdateEquipment() {
+    @Test
+    public void testDeleteEquipmentByNumber() throws IOException {
 
-        String responseGet1 = ClientActions.getEquipmentByNumber();
-        assertEquals(responseGet1, "Error. This equipment has not been created ");
+        Response responseGet = ClientActions.getEquipmentByNumber(equipmentNumber);
+        String responseBodyGet = responseGet.body().string();
+        assertTrue(responseBodyGet.contains("Not Found"), "Response body should contain 'Not Found', but contains '" +
+                responseBodyGet + "'");
+        assertEquals(responseGet.code(), 404);
 
-        String responsePost = ClientActions.createEquipment();
-        assertTrue(responsePost.contains("equipmentNumber"));
+        Response responsePost = ClientActions.createEquipment();
+        String responseBodyPost = responsePost.body().string();
+        assertTrue(responseBodyPost.contains("equipmentNumber"));
+        assertEquals(responsePost.code(), 201);
 
-        String responseDelete = ClientActions.deleteEquipment();
-        assertEquals(responsePost, responseDelete);
+        Response responseDelete = ClientActions.deleteEquipment(equipmentNumber);
+        assertEquals(responseDelete.code(), 200);
+        wireMockServer.resetScenarios();
 
-        String responseGet2 = ClientActions.getEquipmentByNumber();
-        assertEquals(responseGet2, "Error. This equipment has not been created ");
-
-    }*/
-
-/*    @Test
-    public void testDeleteEquipmentByNumber() {
-
-    }*/
+    }
 
     @AfterTest
     public void tearDown() {
+
         if (wireMockServer != null) {
             wireMockServer.stop();
         }
+
     }
 }
